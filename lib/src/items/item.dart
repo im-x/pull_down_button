@@ -65,6 +65,7 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
     this.icon,
     this.iconColor,
     this.iconWidget,
+    this.leadingIconWidget,
     this.isDestructive = false,
   })  : selected = null,
         assert(
@@ -88,6 +89,7 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
     this.iconWidget,
     this.isDestructive = false,
     this.selected = false,
+    this.leadingIconWidget,
   }) : assert(
           icon == null || iconWidget == null,
           'Please provide either icon or iconWidget',
@@ -153,6 +155,8 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
   ///
   /// If used in [PullDownMenuActionsRow], either this or [icon] is required.
   final Widget? iconWidget;
+
+  final Widget? leadingIconWidget;
 
   /// Whether this item represents destructive action;
   ///
@@ -277,6 +281,7 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
       ElementSize.large => _LargeItem(
           icon: icon,
           iconWidget: iconWidget,
+          leadingIconWidget: leadingIconWidget,
           destructiveColor: theme.destructiveColor!,
           onHoverColor: theme.onHoverTextColor!,
           iconColor: iconColor,
@@ -447,10 +452,12 @@ class _LargeItem extends StatelessWidget {
     required this.titleStyle,
     required this.subtitle,
     required this.subtitleStyle,
+    required this.leadingIconWidget,
   });
 
   final IconData? icon;
   final Widget? iconWidget;
+  final Widget? leadingIconWidget;
   final Color destructiveColor;
   final Color onHoverColor;
   final Color? iconColor;
@@ -527,9 +534,10 @@ class _LargeItem extends StatelessWidget {
         !isInAccessibilityMode && (icon != null || iconWidget != null);
     final hasLeading = leading != null;
 
-    if (hasLeading || hasIcon) {
+    if (hasLeading || hasIcon || leadingIconWidget != null) {
       body = Row(
         children: [
+          if (leadingIconWidget != null) leadingIconWidget!,
           if (hasLeading)
             DefaultTextStyle(
               style: TextStyle(color: resolvedStyle.color),
